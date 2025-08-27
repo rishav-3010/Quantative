@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantitative Techniques for MBA Students</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide:nth-child(odd) {
+            animation-delay: 0.2s;
+        }
+
+        .slide:nth-child(even) {
+            animation-delay: 0.4s;
+        }
+
+        h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #4a5568;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .visual-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+            align-items: center;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .example-box {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 15px 15px 0;
+        }
+
+        .highlight-stat {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .concept-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .interactive-demo {
+            background: #edf2f7;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .demo-button:hover {
+            transform: scale(1.05);
+        }
+
+        .probability-visual {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .prob-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .decision-tree {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .tree-node {
+            background: #667eea;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 10px;
+            position: relative;
+        }
+
+        .tree-branch {
+            width: 2px;
+            height: 40px;
+            background: #667eea;
+            position: absolute;
+        }
+
+        @media (max-width: 768px) {
+            .visual-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .slide {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>QUANTITATIVE TECHNIQUES</h1>
+            <div class="subtitle">Essential Methods for MBA Students</div>
+            <div class="subtitle">Strategic Decision Making Through Data Analysis</div>
+            <div class="visual-section">
+                <div>
+                    <h3>Key Benefits</h3>
+                    <div class="highlight-stat">📊 Data-Driven Decisions</div>
+                    <div class="highlight-stat">📈 Predictive Analytics</div>
+                    <div class="highlight-stat">⚖️ Risk Management</div>
+                    <div class="highlight-stat">🎯 Optimization</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Descriptive Statistics -->
+        <div class="slide">
+            <h2>Descriptive Statistics</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Measures of Central Tendency</h3>
+                    <div class="formula-box">
+                        Mean (μ) = Σx / n<br>
+                        Standard Deviation (σ) = √[Σ(x-μ)² / n]
+                    </div>
+                    <div class="example-box">
+                        <strong>Business Example:</strong><br>
+                        Analyzing monthly sales data:<br>
+                        Sales: [45K, 52K, 48K, 55K, 43K]<br>
+                        Mean: 48.6K, Std Dev: 4.7K
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Probability Theory -->
+        <div class="slide">
+            <h2>Probability Theory</h2>
+            <div class="formula-box">
+                P(A) = Number of favorable outcomes / Total outcomes<br>
+                P(A∪B) = P(A) + P(B) - P(A∩B)
+            </div>
+            <div class="probability-visual">
+                <div class="prob-circle" style="background: #e53e3e;">20%<br>Risk</div>
+                <div class="prob-circle" style="background: #38a169;">65%<br>Success</div>
+                <div class="prob-circle" style="background: #3182ce;">15%<br>Neutral</div>
+            </div>
+            <div class="example-box">
+                <strong>Business Application:</strong> Market penetration analysis shows 20% risk of failure, 65% probability of success, and 15% neutral outcome for new product launch.
+            </div>
+        </div>
+
+        <!-- Slide 4: Regression Analysis -->
+        <div class="slide">
+            <h2>Regression Analysis</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Linear Relationship</h3>
+                    <div class="formula-box">
+                        Y = α + βX + ε<br>
+                        R² = Explained Variation / Total Variation
+                    </div>
+                    <div class="interactive-demo">
+                        <h4>Interactive Example: Sales vs Advertising</h4>
+                        <div class="demo-controls">
+                            <button class="demo-button" onclick="updateRegression('weak')">Weak Correlation</button>
+                            <button class="demo-button" onclick="updateRegression('strong')">Strong Correlation</button>
+                        </div>
+                        <div id="regressionResult" class="highlight-stat">R² = 0.75 (Strong Relationship)</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="regressionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Time Series Analysis -->
+        <div class="slide">
+            <h2>Time Series Analysis</h2>
+            <div class="grid-3">
+                <div class="concept-card">
+                    <h4>📈 Trend</h4>
+                    <p>Long-term movement in data</p>
+                </div>
+                <div class="concept-card">
+                    <h4>🔄 Seasonality</h4>
+                    <p>Regular patterns that repeat</p>
+                </div>
+                <div class="concept-card">
+                    <h4>📊 Cyclical</h4>
+                    <p>Fluctuations around trend</p>
+                </div>
+            </div>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="timeSeriesChart"></canvas>
+            </div>
+            <div class="formula-box">
+                Moving Average: MA = (Y₁ + Y₂ + ... + Yₙ) / n<br>
+                Exponential Smoothing: F(t+1) = αY(t) + (1-α)F(t)
+            </div>
+        </div>
+
+        <!-- Slide 6: Linear Programming -->
+        <div class="slide">
+            <h2>Linear Programming</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Optimization Problem</h3>
+                    <div class="formula-box">
+                        Maximize: Z = 3x₁ + 2x₂<br>
+                        Subject to:<br>
+                        2x₁ + x₂ ≤ 100<br>
+                        x₁ + 2x₂ ≤ 80<br>
+                        x₁, x₂ ≥ 0
+                    </div>
+                    <div class="example-box">
+                        <strong>Business Case:</strong><br>
+                        Product Mix Optimization<br>
+                        • Product A: $3 profit/unit<br>
+                        • Product B: $2 profit/unit<br>
+                        • Resource constraints
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lpChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Decision Theory -->
+        <div class="slide">
+            <h2>Decision Theory</h2>
+            <div class="decision-tree">
+                <h3>Decision Tree Example: Market Entry</h3>
+                <div style="text-align: center; margin-top: 20px;">
+                    <div class="tree-node">Enter Market</div>
+                    <div style="margin: 20px 0;">
+                        <div class="tree-node" style="background: #38a169;">High Demand (0.6)<br>$500K</div>
+                        <div class="tree-node" style="background: #e53e3e;">Low Demand (0.4)<br>-$200K</div>
+                    </div>
+                    <div class="highlight-stat">Expected Value = 0.6 × $500K + 0.4 × (-$200K) = $220K</div>
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="concept-card">
+                    <h4>🎯 Maximax</h4>
+                    <p>Optimistic approach</p>
+                </div>
+                <div class="concept-card">
+                    <h4>🛡️ Maximin</h4>
+                    <p>Conservative approach</p>
+                </div>
+                <div class="concept-card">
+                    <h4>⚖️ Expected Value</h4>
+                    <p>Probability-weighted outcomes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Quality Control -->
+        <div class="slide">
+            <h2>Quality Control Methods</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Control Charts</h3>
+                    <div class="formula-box">
+                        Control Limits:<br>
+                        UCL = x̄ + A₂R̄<br>
+                        LCL = x̄ - A₂R̄<br>
+                        <br>
+                        Process Capability:<br>
+                        Cp = (USL - LSL) / (6σ)
+                    </div>
+                    <div class="grid-3">
+                        <div class="concept-card">
+                            <h4>📊 X-bar Chart</h4>
+                            <p>Monitor process mean</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>📈 R Chart</h4>
+                            <p>Monitor variability</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="controlChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Implementation Tools -->
+        <div class="slide">
+            <h2>Implementation & Tools</h2>
+            <div class="grid-3">
+                <div class="concept-card">
+                    <h4>📈 Excel</h4>
+                    <p>Basic analysis, widely available</p>
+                    <div class="highlight-stat">Beginner Friendly</div>
+                </div>
+                <div class="concept-card">
+                    <h4>📊 R/Python</h4>
+                    <p>Advanced analytics, machine learning</p>
+                    <div class="highlight-stat">Professional Level</div>
+                </div>
+                <div class="concept-card">
+                    <h4>🔧 SPSS/SAS</h4>
+                    <p>Enterprise solutions</p>
+                    <div class="highlight-stat">Industry Standard</div>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Best Practices Checklist</h3>
+                <div class="grid-3">
+                    <div class="concept-card">
+                        <h4>✅ Data Quality</h4>
+                        <p>Ensure accuracy and completeness</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>✅ Model Validation</h4>
+                        <p>Test assumptions and validate results</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>✅ Clear Communication</h4>
+                        <p>Present findings effectively</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: ANOVA Analysis -->
+        <div class="slide">
+            <h2>ANOVA (Analysis of Variance)</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Comparing Multiple Groups</h3>
+                    <div class="formula-box">
+                        F = MSB / MSW<br>
+                        MSB = SSB / (k-1)<br>
+                        MSW = SSW / (N-k)
+                    </div>
+                    <div class="example-box">
+                        <strong>Business Case:</strong><br>
+                        Comparing sales performance across 4 regions:<br>
+                        • North: [45, 48, 52, 46]<br>
+                        • South: [38, 42, 40, 44]<br>
+                        • East: [55, 58, 60, 57]<br>
+                        • West: [49, 51, 47, 53]
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="anovaChart"></canvas>
+                </div>
+            </div>
+            <div class="interactive-demo">
+                <h4>ANOVA Results</h4>
+                <div class="grid-3">
+                    <div class="concept-card">
+                        <h4>📊 F-Statistic</h4>
+                        <div class="highlight-stat">F = 12.45</div>
+                    </div>
+                    <div class="concept-card">
+                        <h4>📈 P-Value</h4>
+                        <div class="highlight-stat">p < 0.001</div>
+                    </div>
+                    <div class="concept-card">
+                        <h4>✅ Conclusion</h4>
+                        <div class="highlight-stat">Significant Difference</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Correlation Matrix -->
+        <div class="slide">
+            <h2>Correlation & Covariance Analysis</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Relationship Strength</h3>
+                    <div class="formula-box">
+                        r = Σ[(xi - x̄)(yi - ȳ)] / √[Σ(xi - x̄)²Σ(yi - ȳ)²]<br>
+                        <br>
+                        Cov(X,Y) = Σ[(xi - x̄)(yi - ȳ)] / n
+                    </div>
+                    <div class="grid-3">
+                        <div class="concept-card">
+                            <h4>Strong Positive</h4>
+                            <div style="color: #38a169; font-size: 1.5em;">r > 0.8</div>
+                        </div>
+                        <div class="concept-card">
+                            <h4>Moderate</h4>
+                            <div style="color: #d69e2e; font-size: 1.5em;">0.3 < r < 0.8</div>
+                        </div>
+                        <div class="concept-card">
+                            <h4>Weak/None</h4>
+                            <div style="color: #e53e3e; font-size: 1.5em;">r < 0.3</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="correlationChart"></canvas>
+                </div>
+            </div>
+            <div class="interactive-demo">
+                <h4>Business Variables Correlation</h4>
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="showCorrelation('marketing')">Marketing Mix</button>
+                    <button class="demo-button" onclick="showCorrelation('financial')">Financial Metrics</button>
+                </div>
+                <div id="correlationMatrix" class="highlight-stat">Marketing Spend ↔ Sales: r = 0.82</div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Advanced Forecasting -->
+        <div class="slide">
+            <h2>Advanced Forecasting Techniques</h2>
+            <div class="grid-3">
+                <div class="concept-card">
+                    <h4>📈 Exponential Smoothing</h4>
+                    <p>F(t+1) = αY(t) + (1-α)F(t)</p>
+                    <div class="highlight-stat">Best for: Stable trends</div>
+                </div>
+                <div class="concept-card">
+                    <h4>🔄 ARIMA Models</h4>
+                    <p>AutoRegressive Integrated Moving Average</p>
+                    <div class="highlight-stat">Best for: Complex patterns</div>
+                </div>
+                <div class="concept-card">
+                    <h4>🎯 Holt-Winters</h4>
+                    <p>Triple exponential smoothing</p>
+                    <div class="highlight-stat">Best for: Seasonal data</div>
+                </div>
+            </div>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="forecastChart"></canvas>
+            </div>
+            <div class="interactive-demo">
+                <h4>Forecast Accuracy Comparison</h4>
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="updateForecast('simple')">Simple Moving Avg</button>
+                    <button class="demo-button" onclick="updateForecast('exponential')">Exponential Smoothing</button>
+                    <button class="demo-button" onclick="updateForecast('seasonal')">Seasonal Decomposition</button>
+                </div>
+                <div id="forecastAccuracy" class="highlight-stat">MAPE: 12.5% | MAE: 15.2 | RMSE: 18.7</div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Monte Carlo Simulation -->
+        <div class="slide">
+            <h2>Monte Carlo Simulation</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Risk Analysis Through Simulation</h3>
+                    <div class="formula-box">
+                        Simulation Steps:<br>
+                        1. Define probability distributions<br>
+                        2. Generate random samples<br>
+                        3. Calculate outcomes<br>
+                        4. Analyze results
+                    </div>
+                    <div class="example-box">
+                        <strong>Business Application:</strong><br>
+                        Project NPV Analysis<br>
+                        • Revenue: Normal(μ=1000, σ=200)<br>
+                        • Costs: Triangular(500, 700, 900)<br>
+                        • Discount Rate: Uniform(8%, 12%)<br>
+                        • 10,000 simulations
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="monteCarloChart"></canvas>
+                </div>
+            </div>
+            <div class="interactive-demo">
+                <h4>Simulation Results</h4>
+                <div class="grid-3">
+                    <div class="concept-card">
+                        <h4>📊 Mean NPV</h4>
+                        <div class="highlight-stat">$245K</div>
+                    </div>
+                    <div class="concept-card">
+                        <h4>📈 Success Rate</h4>
+                        <div class="highlight-stat">78.5%</div>
+                    </div>
+                    <div class="concept-card">
+                        <h4>⚠️ Risk (5th %ile)</h4>
+                        <div class="highlight-stat">-$85K</div>
+                    </div>
+                </div>
+                <button class="demo-button" onclick="runSimulation()" style="margin-top: 15px;">🎲 Run New Simulation</button>
+            </div>
+        </div>
+
+        <!-- Slide 14: Six Sigma & Process Improvement -->
+        <div class="slide">
+            <h2>Six Sigma & Process Improvement</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>DMAIC Methodology</h3>
+                    <div class="grid-3" style="grid-template-columns: repeat(5, 1fr);">
+                        <div class="concept-card" style="background: #e6fffa;">
+                            <h4>🎯 Define</h4>
+                            <p>Problem & Goals</p>
+                        </div>
+                        <div class="concept-card" style="background: #f0fff4;">
+                            <h4>📏 Measure</h4>
+                            <p>Current Performance</p>
+                        </div>
+                        <div class="concept-card" style="background: #fffaf0;">
+                            <h4>🔍 Analyze</h4>
+                            <p>Root Causes</p>
+                        </div>
+                        <div class="concept-card" style="background: #f0f8ff;">
+                            <h4>🔧 Improve</h4>
+                            <p>Solutions</p>
+                        </div>
+                        <div class="concept-card" style="background: #fdf2e9;">
+                            <h4>📊 Control</h4>
+                            <p>Sustain Gains</p>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        Process Capability:<br>
+                        Cp = (USL - LSL) / (6σ)<br>
+                        Cpk = min[(USL - μ)/(3σ), (μ - LSL)/(3σ)]<br>
+                        <br>
+                        Six Sigma = 3.4 defects per million opportunities
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="sixSigmaChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Game Theory Applications -->
+        <div class="slide">
+            <h2>Game Theory in Business</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Strategic Decision Making</h3>
+                    <div class="example-box">
+                        <strong>Pricing Game Example:</strong><br>
+                        Two competitors setting prices
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr style="background: #667eea; color: white;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Competitor B: Low</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Competitor B: High</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; background: #667eea; color: white;"><strong>Company A: Low</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">(50, 50)</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">(80, 20)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; background: #667eea; color: white;"><strong>Company A: High</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">(20, 80)</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center; background: #ffd89b;">(70, 70) ★</td>
+                        </tr>
+                    </table>
+                    <div class="highlight-stat">Nash Equilibrium: Both choose HIGH pricing</div>
+                </div>
+                <div>
+                    <h3>Types of Games</h3>
+                    <div class="grid-3">
+                        <div class="concept-card">
+                            <h4>🎯 Zero-Sum</h4>
+                            <p>One wins, other loses</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🤝 Cooperative</h4>
+                            <p>Both can benefit</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>⚖️ Mixed Strategy</h4>
+                            <p>Randomized decisions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Data Visualization Best Practices -->
+        <div class="slide">
+            <h2>Data Visualization & Communication</h2>
+            <div class="grid-3">
+                <div class="concept-card">
+                    <h4>📊 Chart Selection</h4>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>Bar: Comparisons</li>
+                        <li>Line: Trends over time</li>
+                        <li>Scatter: Relationships</li>
+                        <li>Pie: Parts of whole</li>
+                    </ul>
+                </div>
+                <div class="concept-card">
+                    <h4>🎨 Design Principles</h4>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>Clear labels</li>
+                        <li>Appropriate scales</li>
+                        <li>Color consistency</li>
+                        <li>Minimal clutter</li>
+                    </ul>
+                </div>
+                <div class="concept-card">
+                    <h4>📢 Storytelling</h4>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>Key insights first</li>
+                        <li>Context matters</li>
+                        <li>Action-oriented</li>
+                        <li>Audience-specific</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="interactive-demo">
+                <h4>Interactive Dashboard Demo</h4>
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="changeDashboard('sales')">Sales Dashboard</button>
+                    <button class="demo-button" onclick="changeDashboard('financial')">Financial Dashboard</button>
+                    <button class="demo-button" onclick="changeDashboard('operations')">Operations Dashboard</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+                <div id="dashboardKPIs" class="visual-section" style="margin-top: 20px;">
+                    <div class="highlight-stat">Revenue: $2.4M ↑12%</div>
+                    <div class="highlight-stat">Conversion: 3.2% ↑0.8%</div>
+                    <div class="highlight-stat">Customer Sat: 4.2/5 ↑0.3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Machine Learning Integration -->
+        <div class="slide">
+            <h2>Integration with Machine Learning</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Traditional vs ML Approach</h3>
+                    <div class="grid-3">
+                        <div class="concept-card" style="background: #e6fffa;">
+                            <h4>🔢 Traditional Stats</h4>
+                            <p>Hypothesis-driven</p>
+                            <p>Interpretable models</p>
+                            <p>Statistical significance</p>
+                        </div>
+                        <div class="concept-card" style="background: #f0fff4;">
+                            <h4>🧠 Machine Learning</h4>
+                            <p>Data-driven patterns</p>
+                            <p>Predictive accuracy</p>
+                            <p>Complex relationships</p>
+                        </div>
+                        <div class="concept-card" style="background: #fdf2e9;">
+                            <h4>🔄 Hybrid Approach</h4>
+                            <p>Best of both worlds</p>
+                            <p>Explainable AI</p>
+                            <p>Business insights</p>
+                        </div>
+                    </div>
+                    <div class="example-box">
+                        <strong>Business Applications:</strong><br>
+                        • Customer segmentation using clustering<br>
+                        • Demand forecasting with neural networks<br>
+                        • Risk scoring with ensemble methods<br>
+                        • Price optimization with reinforcement learning
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="mlChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Real-World Case Studies -->
+        <div class="slide">
+            <h2>Real-World Business Cases</h2>
+            <div class="grid-3">
+                <div class="concept-card">
+                    <h4>🏪 Retail Optimization</h4>
+                    <p><strong>Problem:</strong> Inventory management</p>
+                    <p><strong>Solution:</strong> Time series forecasting + Linear programming</p>
+                    <div class="highlight-stat">Result: 15% cost reduction</div>
+                </div>
+                <div class="concept-card">
+                    <h4>🏭 Manufacturing QC</h4>
+                    <p><strong>Problem:</strong> Quality control</p>
+                    <p><strong>Solution:</strong> Control charts + Six Sigma</p>
+                    <div class="highlight-stat">Result: 99.7% quality rate</div>
+                </div>
+                <div class="concept-card">
+                    <h4>💰 Financial Risk</h4>
+                    <p><strong>Problem:</strong> Credit risk assessment</p>
+                    <p><strong>Solution:</strong> Logistic regression + Monte Carlo</p>
+                    <div class="highlight-stat">Result: 25% better prediction</div>
+                </div>
+            </div>
+            <div class="interactive-demo">
+                <h4>Case Study Deep Dive</h4>
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="showCase('retail')">Retail Case</button>
+                    <button class="demo-button" onclick="showCase('manufacturing')">Manufacturing Case</button>
+                    <button class="demo-button" onclick="showCase('financial')">Financial Case</button>
+                </div>
+                <div id="caseDetails" class="example-box">
+                    <strong>Retail Inventory Optimization:</strong><br>
+                    Challenge: $2M tied up in excess inventory<br>
+                    Approach: Seasonal ARIMA + Safety stock optimization<br>
+                    Implementation: 6 months with cross-functional team<br>
+                    Results: 15% inventory reduction, 98% service level maintained
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Future of Analytics -->
+        <div class="slide">
+            <h2>Future of Business Analytics</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Emerging Trends</h3>
+                    <div class="grid-3">
+                        <div class="concept-card">
+                            <h4>🚀 Real-time Analytics</h4>
+                            <p>Instant insights for immediate action</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🤖 AutoML</h4>
+                            <p>Automated model selection and tuning</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🔍 Explainable AI</h4>
+                            <p>Transparent and interpretable models</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>📱 Edge Analytics</h4>
+                            <p>Analytics at the point of data collection</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🌐 Federated Learning</h4>
+                            <p>Collaborative learning without data sharing</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🔮 Prescriptive Analytics</h4>
+                            <p>What should we do? (beyond prediction)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+            <div class="example-box">
+                <strong>Skills for the Future:</strong> Combine statistical thinking with business acumen, technology proficiency, and ethical considerations for responsible analytics.
+            </div>
+        </div>
+
+        <!-- Slide 20: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways & Action Plan</h2>
+            <div class="visual-section">
+                <div>
+                    <h3>Success Factors</h3>
+                    <div class="highlight-stat">🎯 Understanding Fundamentals</div>
+                    <div class="highlight-stat">💼 Practical Application</div>
+                    <div class="highlight-stat">🛠️ Tool Proficiency</div>
+                    <div class="highlight-stat">🧠 Critical Thinking</div>
+                    <div class="highlight-stat">📢 Communication Skills</div>
+                    
+                    <div class="interactive-demo" style="margin-top: 30px;">
+                        <h4>Your Learning Path</h4>
+                        <div class="grid-3">
+                            <div class="concept-card">
+                                <h4>📚 Foundation (Months 1-2)</h4>
+                                <p>Master descriptive statistics, probability, basic regression</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4>🏗️ Intermediate (Months 3-4)</h4>
+                                <p>Time series, optimization, hypothesis testing</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4>🚀 Advanced (Months 5-6)</h4>
+                                <p>Machine learning integration, advanced forecasting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="summaryChart"></canvas>
+                </div>
+            </div>
+            <div class="example-box">
+                <strong>Remember:</strong> The goal is not just to perform calculations, but to generate actionable insights that drive better business outcomes. Start with business problems, apply appropriate techniques, and always validate your results in the context of business reality.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Chart references for updates
+        let charts = {};
+        
+        // Initialize all charts
+        function initializeCharts() {
+            // Skills importance chart
+            const ctx1 = document.getElementById('skillsChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'radar',
+                data: {
+                    labels: ['Statistics', 'Probability', 'Regression', 'Optimization', 'Forecasting', 'Decision Making'],
+                    datasets: [{
+                        label: 'Importance for MBA',
+                        data: [90, 85, 95, 80, 88, 92],
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(102, 126, 234, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Distribution chart
+            const ctx2 = document.getElementById('distributionChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'Sales (K)',
+                        data: [45, 52, 48, 55, 43],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Average',
+                        data: [48.6, 48.6, 48.6, 48.6, 48.6],
+                        type: 'line',
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+
+            // Regression chart
+            const ctx3 = document.getElementById('regressionChart').getContext('2d');
+            const regressionData = [
+                {x: 10, y: 120}, {x: 20, y: 180}, {x: 30, y: 250},
+                {x: 40, y: 320}, {x: 50, y: 380}, {x: 60, y: 450}
+            ];
+            
+            new Chart(ctx3, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Sales vs Advertising',
+                        data: regressionData,
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                    }, {
+                        label: 'Trend Line',
+                        data: [{x: 10, y: 130}, {x: 60, y: 430}],
+                        type: 'line',
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Advertising Spend (K)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Sales (K)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Time series chart
+            const ctx4 = document.getElementById('timeSeriesChart').getContext('2d');
+            new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: 'Actual Sales',
+                        data: [100, 150, 120, 200, 110, 160, 130, 220, 120, 170, 140, 240],
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        fill: true
+                    }, {
+                        label: 'Trend',
+                        data: [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210],
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Sales (Units)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Linear Programming chart
+            const ctx5 = document.getElementById('lpChart').getContext('2d');
+            new Chart(ctx5, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Feasible Region',
+                        data: [
+                            {x: 0, y: 0}, {x: 0, y: 40}, {x: 30, y: 40}, 
+                            {x: 50, y: 0}, {x: 0, y: 0}
+                        ],
+                        backgroundColor: 'rgba(102, 126, 234, 0.3)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        fill: true,
+                        showLine: true,
+                        pointRadius: 3
+                    }, {
+                        label: 'Optimal Point',
+                        data: [{x: 30, y: 40}],
+                        backgroundColor: 'rgba(231, 76, 60, 1)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        pointRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Product A (x₁)'
+                            },
+                            min: 0,
+                            max: 60
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Product B (x₂)'
+                            },
+                            min: 0,
+                            max: 60
+                        }
+                    }
+                }
+            });
+
+            // Control chart
+            const ctx6 = document.getElementById('controlChart').getContext('2d');
+            const processData = [98, 102, 99, 101, 97, 103, 100, 99, 101, 98, 102, 100];
+            new Chart(ctx6, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 12}, (_, i) => `Sample ${i+1}`),
+                    datasets: [{
+                        label: 'Process Mean',
+                        data: processData,
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }, {
+                        label: 'UCL',
+                        data: Array(12).fill(105),
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        borderDash: [5, 5],
+                        pointRadius: 0
+                    }, {
+                        label: 'LCL',
+                        data: Array(12).fill(95),
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        borderDash: [5, 5],
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+
+            // Summary chart
+            const ctx7 = document.getElementById('summaryChart').getContext('2d');
+            new Chart(ctx7, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Descriptive Stats', 'Probability', 'Regression', 'Time Series', 'Optimization', 'Decision Theory'],
+                    datasets: [{
+                        data: [20, 15, 25, 15, 15, 10],
+                        backgroundColor: [
+                            '#667eea', '#764ba2', '#f093fb', '#f5576c',
+                            '#4facfe', '#00f2fe'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            const ctxAnova = document.getElementById('anovaChart').getContext('2d');
+new Chart(ctxAnova, {
+    type: 'bar',
+    data: {
+        labels: ['North', 'South', 'East', 'West'],
+        datasets: [{
+            label: 'Mean Sales',
+            data: [47.75, 41, 57.5, 50],
+            backgroundColor: ['#4facfe', '#f5576c', '#667eea', '#f093fb'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {display: false}
+        },
+        scales: {
+            y: {beginAtZero: true, title: {display: true, text: "Sales"}}
+        }
+    }
+});
+            // Correlation & Covariance Analysis chart
+            const ctxCorr = document.getElementById('correlationChart').getContext('2d');
+            new Chart(ctxCorr, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Marketing Spend vs Sales',
+                            data: [
+                                {x: 30, y: 45}, {x: 40, y: 50}, {x: 50, y: 60}, {x: 60, y: 72},
+                                {x: 70, y: 82}, {x: 80, y: 95}
+                            ],
+                            backgroundColor: '#38a169'
+                        },
+                        {
+                            label: 'Trend Line',
+                            data: [{x: 30, y: 43}, {x: 80, y: 97}],
+                            type: 'line',
+                            backgroundColor: 'rgba(52,152,219,0.1)',
+                            borderColor: '#667eea',
+                            borderWidth: 2,
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {title: {display: true, text: "Marketing Spend (K)"}},
+                        y: {title: {display: true, text: "Sales (K)"}}
+                    }
+                }
+            });
+
+                        // Advanced Forecasting Techniques chart
+            const ctxForecast = document.getElementById('forecastChart').getContext('2d');
+            new Chart(ctxForecast, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Actual',
+                        data: [120, 132, 115, 140, 155, 160, 150, 170],
+                        borderColor: '#667eea',
+                        fill: false
+                    }, {
+                        label: 'Exponential Smoothing',
+                        data: [122, 130, 120, 135, 150, 158, 152, 168],
+                        borderColor: '#f093fb',
+                        borderDash: [5,5],
+                        fill: false
+                    }, {
+                        label: 'ARIMA Forecast',
+                        data: [118, 135, 119, 142, 153, 162, 149, 172],
+                        borderColor: '#38a169',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { title: { display: true, text: 'Monthly Sales' } } }
+                }
+            });
+
+                        // Monte Carlo Simulation chart
+            const ctxMonte = document.getElementById('monteCarloChart').getContext('2d');
+            new Chart(ctxMonte, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({length: 20}, (_, i) => i*25 - 200),
+                    datasets: [{
+                        label: 'NPV Distribution',
+                        data: [1, 3, 8, 20, 40, 75, 112, 210, 315, 385, 466, 312, 180, 90, 45, 23, 13, 6, 2, 1],
+                        backgroundColor: '#764ba2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {title: {display: true, text: 'Net Present Value ($K)'}},
+                        y: {title: {display: true, text: 'Frequency'}}
+                    }
+                }
+            });
+
+                        // Six Sigma & Process Improvement chart
+            const ctxSixSigma = document.getElementById('sixSigmaChart').getContext('2d');
+            new Chart(ctxSixSigma, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 50}, (_, i) => i+1),
+                    datasets: [
+                        {
+                            label: 'Process Data',
+                            data: Array.from({length: 50}, (_, i) => 100 + Math.sin(i/7)*2 + Math.random()*1),
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102,126,234,0.2)',
+                            fill: false
+                        },
+                        {
+                            label: 'USL',
+                            data: Array(50).fill(106),
+                            borderColor: '#e53e3e',
+                            borderDash: [5,5],
+                            fill: false
+                        },
+                        {
+                            label: 'LSL',
+                            data: Array(50).fill(94),
+                            borderColor: '#3182ce',
+                            borderDash: [5,5],
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { title: { display: true, text: 'Quality Metric' } } }
+                }
+            });
+            // Data Visualization & Communication chart
+            const ctxDashboard = document.getElementById('dashboardChart').getContext('2d');
+            new Chart(ctxDashboard, {
+                type: 'bar',
+                data: {
+                    labels: ['Revenue', 'Conversion Rate', 'Customer Sat'],
+                    datasets: [{
+                        label: 'KPI',
+                        data: [2.4, 3.2, 4.2],
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { title: { display: true, text: 'Value' } }
+                    }
+                }
+            });
+            // Integration with Machine Learning chart
+            const ctxML = document.getElementById('mlChart').getContext('2d');
+            new Chart(ctxML, {
+                type: 'radar',
+                data: {
+                    labels: ['Interpretability', 'Predictive Power', 'Scalability', 'Automation', 'Explainability'],
+                    datasets: [
+                        {
+                            label: 'Traditional Stats',
+                            data: [8, 5, 4, 3, 7],
+                            backgroundColor: 'rgba(102,126,234,0.2)',
+                            borderColor: '#667eea'
+                        },
+                        {
+                            label: 'Machine Learning',
+                            data: [5, 10, 8, 9, 5],
+                            backgroundColor: 'rgba(231,76,60,0.2)',
+                            borderColor: '#e53e3e'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                        r: { beginAtZero: true, max: 10 }
+                    }
+                }
+            });
+            // Future of Business Analytics chart
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                    datasets: [
+                        {label: 'Real-time Analytics', data: [20, 30, 40, 55, 70, 90], borderColor: '#667eea', fill: false},
+                        {label: 'AutoML', data: [5, 12, 18, 28, 45, 60], borderColor: '#38a169', fill: false},
+                        {label: 'Explainable AI', data: [10, 15, 20, 30, 40, 55], borderColor: '#4facfe', fill: false},
+                        {label: 'Edge Analytics', data: [2, 5, 12, 22, 35, 50], borderColor: '#764ba2', fill: false}
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                        y: { title: { display: true, text: 'Adoption Rate (%)' }, min: 0, max: 100 }
+                    }
+                }
+            });
+
+
+        }
+        
+
+        // Interactive regression function
+        function updateRegression(strength) {
+            const resultDiv = document.getElementById('regressionResult');
+            if (strength === 'weak') {
+                resultDiv.textContent = 'R² = 0.35 (Weak Relationship)';
+                resultDiv.style.background = 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)';
+            } else {
+                resultDiv.textContent = 'R² = 0.85 (Strong Relationship)';
+                resultDiv.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initializeCharts, 500);
+        });
+    </script>
+</body>
+</html>
